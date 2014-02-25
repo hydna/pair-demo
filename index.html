@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Pair devices</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/hydna/1.0.0/hydna.min.js"></script>
+    <link rel="stylesheet" href="./style/app.css" type="text/css" media="screen"/>
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="img/icon-76x76.png">
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="img/icon-114x114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="img/icon-120x120.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/icon-144x144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="img/icon-152x152.png">
+    <link rel="apple-touch-icon-precomposed" href="img/icon-57x57.png">
+  </head>
+  <body class="intro">
+    <div id="intro">
+      <h1>Hydna Tech Demo</h1>
+      <p>This is a tech demo brought to you by <a href="https://www.hydna.com">Hydna</a>.</p>
+      <p>It demonstrates how to connect pair two devices over near ultra sonic
+         <i>sound waves</i>. The two devices then connects to a mutual Hydna
+         channel and start to transmit data.</p>
+      <p>In order to run this demo:</p>
+        <ul>
+          <li>Navigate your cell phone to <a href="http://hydna.github.io/pair-demo">
+              http://hydna.github.io/pair-demo</a>.</li>
+          <li>Check that your ear phones are unplugged and that the silencer
+              is off.</li>
+          <li>Start listening on your computer by pressing the "listen" button
+              below</li>
+          <li>Touch the screen on your cell phone in order to start to send
+              signals.</li>
+          <li>Put your cell phone close to your computer</li>
+        </ul>
+      <p><b>Disclaimer:</b> Please note that this technic is unstable on many
+          devices (due to hardware and browser vendors). This demo is not
+          intended to be used in production. It rather demonstrates the
+          possibilities of using ultra sonic sound as a possible way when
+          pairing.</p>
+          <p>Firefox has a limitation when dealing with hi frequency sounds. The
+             application checks if hi frequency sounds can be received before
+             start, so please check that the volume on the computer is on.</p>
+      <div class="buttons">
+        <a id="listen" href="#" class="button">Start listen</a> or
+        <a id="transmit" href="#" class="button">Transmit</a>
+      </div>
+    </div>
+    <div id="receiver-view" class="receiver">
+      <div id="indicator">
+        <div class="exchange"></div>
+        <div class="bars">
+          <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+          </ul>
+        </div>
+        <span class="connecting"></span>
+        <span class="locked"></span>
+        <div class="icon-indicator laptop small">
+        </div>
+        <div class="icon-indicator cell small">
+        </div>
+        <div class="icon-indicator not-supported small"></div>
+      </div>
+      <div id="status">
+        <span class="text grant-notice">
+          Please give application access to microphone by pressing allow
+        </span>
+        <span class="text intro">
+          Put your device close to your screen in order to pair
+        </span>
+        <span class="text pairing">
+          <b>Pairing</b>devices, please hold still
+        </span>
+        <span class="text connecting">
+          <b>Connecting</b>to remote device via hydna
+        </span>
+        <span class="text receive-not-supported">
+          Sorry, your device do not support pairing over air
+        </span>
+        <span class="text paired">
+          <b>Paired</b> Touch your display
+        </span>
+        <span id="error" class="text error">
+        </span>
+      </div>
+    </div>
+
+    <div class="transmitter">
+      <div id="indicator">
+        <div class="icon-indicator touch small"></div>
+      </div>
+      <div id="status">
+        <span class="text touch">
+          <b>Touch to pair</b>
+        </span>
+        <span id="error" class="text error">
+        </span>
+      </div>
+    </div>
+
+
+    <script src="script/airpair.js"></script>
+    <script>
+
+      function startReceiver() {
+        var body;
+        var receiver;
+        var indicator;
+        var triggering;
+        var queuedtrigger;
+
+        // document.body.className = "receiver paired";
+        // return;
+        // 
+        // document.body.className = "receiver pair-indication";
+        // setTimeout(function () {
+        //   document.body.className = "receiver pairing step1";
+        //   setTimeout(function () {
+        //     document.body.className = "receiver connecting";
+        //     setTimeout(function () {
+        //       document.body.className = "receiver paired";
+        //       setTimeout(function () {
+        //         document.getElementById("indicator").className = "trigger";
+        //         setTimeout(function () {
+        //           document.getElementById("indicator").className = "";
+        //         }, 1000);
+        //       }, 2000);
+        //       
+        //     }, 5000);
+        //   }, 3000);
+        // }, 3000);
+        // 
+        // return;
+        
+        body = document.body;
+        indicator = document.getElementById("indicator");
+
+        body.className = "receiver grant-notice";
+
+        function triggerThing () {
+          if (triggering) {
+            queuedtrigger = true;
+            return;
+          }
+
+          triggering = true;
+          indicator.className = "trigger";
+
+          setTimeout(function () {
+            triggering = false;
+            indicator.className = "";
+            if (queuedtrigger) {
+              queuedtrigger = false;              
+              setTimeout(triggerThing, 200);
+            }
+          }, 700);
+        }
+
+        (function initReceiver () {
+          receiver = airpair.createReceiver({bits: 8});
+          receiver.start();
+
+          receiver.onstart = function (evt) {
+            body.className = "receiver pair-indication";
+          };
+
+          receiver.onleave = function (evt) {
+            body.className = "receiver pair-indication";
+          };
+
+          receiver.onprogress = function (evt) {
+            var step = Math.round((evt.received / evt.total) * 4);
+            body.className = "receiver pairing step" + step;
+          };
+
+          receiver.ondata = function (evt) {
+            receiver.disconnect();
+            receiver = null;
+            body.className = "receiver connecting";
+            connectChannel(evt.data, function (channel, evt) {
+              if (evt.type == "error") {
+                initReceiver();
+                return;
+              }
+              console.log("connected");
+              body.className = "receiver paired";
+
+              channel.onmessage = function (evt) {
+                if (evt.data != "trigger") {
+                  return;
+                }
+                triggerThing();
+              };
+
+              channel.onsignal = function () {
+                body.className = "";
+                setTimeout(initReceiver, 500);
+                this.close();
+              }
+
+              channel.onclose = function () {
+                body.className = "";
+                setTimeout(initReceiver, 500);
+              }
+            });
+          };
+
+          receiver.onerror = function (evt) {
+            var elem = document.getElementById("error");
+            elem.innerHTML = evt.message;
+            body.className = "receiver error";
+          };        
+        }());
+      }
+
+
+      function startTransmit () {
+        var body;
+        var transmitter;
+        var channel;
+        var connecting;
+        var connected;
+
+        body = document.body;
+
+        body.className = "transmitter touch";
+
+        // body.className = "transmitter pairing";
+        // return;
+        // setTimeout(function () {
+        //   document.body.className = "transmitter connecting";
+        //   setTimeout(function () {
+        //     document.body.className = "transmitter pairing";
+        //     setTimeout(function () {
+        //       document.body.className = "transmitter paired";
+        //     }, 3000);
+        //   }, 3000);
+        // }, 3000);
+        // 
+        // return;
+
+        airpair.enableAudioApiOnIos();
+
+        function setupConnection () {
+          connecting = true;
+
+          body.className = "transmitter connecting";
+          
+          findFreeChannel(function (err, id, chan) {
+            if (err) {
+              return;
+            }
+
+            transmitter = airpair.createTransmitter(id, {bits: 8});
+            transmitter.start();
+
+            body.className = "transmitter pairing";
+
+            chan.onsignal = function (evt) {
+              if (transmitter) {
+                transmitter.disconnect();
+                transmitter = null;
+              }
+
+              if (evt.data == "connected") {
+                body.className = "transmitter paired";
+                connecting = false;
+                channel = chan;
+              } else {
+                channel.close();
+              }
+            };
+
+            chan.onclose = function () {
+              if (transmitter) {
+                transmitter.disconnect();
+                transmitter = null;                
+              }
+              channel = null;
+              connecting = false;
+              body.className = "transmitter touch";
+            };
+          });
+        }
+
+        window.addEventListener("touchstart", function () {
+          if (channel) {
+            channel.send("trigger");
+            return;
+          }
+
+          if (transmitter || connecting) {
+            return;
+          }
+
+          setupConnection();
+        });
+      }
+
+
+      function connectChannel (id, callback) {
+        var channel;
+
+        channel = new HydnaChannel("jfd.hydna.net/pair/" + id, "r");
+
+        channel.onopen = function (evt) {
+          callback(channel, evt);
+        };
+
+        channel.onclose = function (evt) {
+          callback(channel, evt);
+        };
+      }
+
+
+      function findFreeChannel (callback) {
+        (function loop () {
+          var channel;
+          var id;
+
+          id = parseInt(Math.random() * 0xff);
+
+          channel = new HydnaChannel("jfd.hydna.net/pair/" + id, "w");
+
+          channel.onopen = function () {
+            channel.onopen = null;
+            channel.onerror = null;
+            callback(null, id, channel);
+          }
+
+          channel.onclose = function (evt) {
+            if (evt.wasDenied) {
+              setTimeout(loop, 100);
+            }
+            callback(evt);
+          }
+        }());
+      }
+
+
+      document.getElementById("listen").onclick = function () {
+        if (airpair.canReceive == false) {
+          alert("Your device/browser do not support listening.");
+          return;
+        }
+        document.body.className = "";
+        startReceiver();
+      };
+
+      document.getElementById("transmit").onclick = function () {
+        if (airpair.canTransmit == false) {
+          alert("Your device/browser cannot tramit sound.");
+          return;
+        }
+        document.body.className = "";
+        startTransmit();
+      };
+
+      if (navigator.userAgent.indexOf('iPhone') != -1 ||
+          navigator.userAgent.indexOf('iPod') != -1 ||
+          navigator.userAgent.indexOf('android') != -1) {
+        document.body.className = "transmitter";
+        if (airpair.canTransmit == false) {
+          document.body.className = "transmitter not-supported";
+        } else {
+          startTransmit();        
+        }
+      }
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+Hydna Tech Demo
+
+This is a tech demo brought to you by https://www.hydna.com
+
+It demonstrates how to connect pair two devices over near ultra sonic sound
+waves. The two devices then connects to a mutual Hydna channel and start to
+transmit data.
+
+In order to run this demo:
+
+    * Navigate your cell phone to http://hydna.github.io/pair-demo
+    * Check that your ear phones are unplugged and that the silencer is off.
+    * Start listening on your computer by pressing the "listen" button below.
+    * Touch the screen on your cell phone in order to start to send signals.
+    * Put your cell phone close to your computer.
+
+Disclaimer: Please note that this technic is unstable on many devices
+(due to hardware and browser vendors). This demo is not intended to be used in
+production. It rather demonstrates the possibilities of using ultra sonic sound
+as a possible way when pairing.
+
+Firefox has a limitation when dealing with hi frequency sounds. The application
+checks if hi frequency sounds can be received before start, so please check that
+the volume on the computer is on.

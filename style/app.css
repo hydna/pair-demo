@@ -1,0 +1,375 @@
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('../fonts/fontawesome-webfont.eot?v=4.0.1');
+  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.0.1') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff?v=4.0.1') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.0.1') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.0.1#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@import url("http://fonts.googleapis.com/css?family=Nunito:700");
+
+
+* {
+  margin: 0;
+  padding: 0;
+  line-height: normal;
+}
+
+html,
+body {
+  color: #666;
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+}
+
+body {
+  background-color: #eee;
+  font-family: 'Nunito', 'Helvetica', Arial, sans-serif;
+  overflow: hidden;
+}
+
+a {
+  color: #4f8b99;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.button {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 3px;
+  text-decoration: none;
+  line-height: normal;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.2px;
+  border: 1px solid #bbb;
+  background: #e5e5e5;
+  background: -moz-linear-gradient(top, #f8f8f8 0%, #e5e5e5 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f8f8f8), color-stop(100%, #e5e5e5));
+  background: -webkit-linear-gradient(top, #f8f8f8 0%, #e5e5e5 100%);
+  background: -o-linear-gradient(top, #f8f8f8 0%, #e5e5e5 100%);
+  background: -ms-linear-gradient(top, #f8f8f8 0%, #e5e5e5 100%);
+  background: linear-gradient(to bottom, #f8f8f8 0%, #e5e5e5 100%);
+  box-shadow: #e0e0e0 0 2px 2px,inset #fefefe 0 1px 1px;
+  color: #444;
+  text-shadow: #efefef 0 1px 0;
+  position: relative;
+}
+
+
+#intro {
+  display: none;
+  position: absolute;
+  width: 600px;
+  left: 50%;
+  margin-left: -300px;
+  font-size: .9em;
+}
+
+.intro #intro {
+  display: block;
+}
+
+#intro h1 {
+  background-image: url(../img/logo.png);
+  background-repeat: no-repeat;
+  background-position: top center;
+  min-height: 36px;
+  margin: 60px 0 40px 0;
+  text-indent: -10000px;
+}
+
+#intro p {
+  margin-bottom: 14px;
+}
+
+#intro ul {
+  margin-left: 40px;
+  margin-bottom: 30px;
+}
+
+#intro li {
+  margin-bottom: 10px;
+}
+
+#intro .buttons {
+  text-align: center;
+}
+
+#intro .buttons .button:first-child {
+  margin-right: 20px;
+}
+
+#intro .buttons .button:last-child {
+  margin-left: 20px;
+}
+
+#receiver-view {
+  display: none;
+}
+
+.transmitter #receiver-view,
+.receiver #receiver-view {
+  display: block;
+}
+
+#indicator {
+  position: absolute;
+  top: 35%;
+  width: 100%;
+  text-align: center;
+}
+
+#status {
+  position: absolute;
+  right: 0;
+  bottom: 80px;
+  left: 0;
+  font-size: .8em;
+}
+
+#text {
+  position: relative;
+  display: inline-block;
+}
+
+.text {
+  position: absolute;
+  display: inline-block;
+  opacity: 0;
+  text-align: center;
+  width: 100%;
+  -webkit-transition: opacity 1s;
+}
+
+.text b {
+  display: block;
+  font-size: 1.4em;
+  color: #333;
+}
+
+.grant-notice .text.grant-notice,
+.pair-indication .text.intro,
+.pairing .text.pairing,
+.not-supported .text.receive-not-supported,
+.paired .text.paired,
+.touch .text.touch,
+.connecting .text.connecting,
+.error .text.error {
+  opacity: 1;
+}
+
+.exchange {
+  font-family: 'FontAwesome';
+  position: absolute;
+  text-align: center;
+  color: #792223;
+  left: 50%;
+  top: 30px;
+  margin-left: -14px;
+  opacity: 0;
+  font-size: 2.0em;
+  -webkit-transition: opacity .4s;
+}
+
+.exchange:after {
+  content: "\f0ec";
+}
+
+
+#indicator .bars {
+  position: absolute;
+  text-align: center;
+  left: 50%;
+  top: 40px;
+  opacity: 0;
+  -webkit-transition: opacity .4s;
+}
+
+.receiver.pairing #indicator .bars {
+  opacity: 1;
+}
+
+#indicator .bars ul {
+  position: relative;
+  display: inline-block;
+  list-style: none;
+  margin-left: -100%;
+}
+
+#indicator .bars li {
+  float: left;
+  font-family: 'FontAwesome';
+  width: 20px;
+  height: 20px;
+  color: #792223;
+}
+
+#indicator .bars li:after {
+  content: "\f10c";
+}
+
+.step1 #indicator .bars li:nth-child(1):after {
+  content: "\f111";
+}
+
+.step2 #indicator .bars li:nth-child(1):after,
+.step2 #indicator .bars li:nth-child(2):after {
+  content: "\f111";
+}
+
+.step3 #indicator .bars li:nth-child(1):after,
+.step3 #indicator .bars li:nth-child(2):after,
+.step3 #indicator .bars li:nth-child(3):after {
+  content: "\f111";
+}
+
+.step4 #indicator .bars li:nth-child(1):after,
+.step4 #indicator .bars li:nth-child(2):after,
+.step4 #indicator .bars li:nth-child(3):after,
+.step4 #indicator .bars li:nth-child(4):after {
+  content: "\f111";
+}
+
+.icon-indicator {
+  position: absolute;
+  font-family: 'FontAwesome';
+  display: inline-block;
+  font-size: 8.0em;
+  border-radius: 4.0em;
+  background-color: #FB3E33;
+  color: #fff; /*#792223;*/
+  left: 50%;
+  width: 1.5em;
+  height: 1.5em;
+  text-align: center;
+  -webkit-transition: all 1s;
+  transition: all .6s;
+  margin-left: -.75em;
+  opacity: 0;
+}
+
+.pairing .icon-indicator.laptop,
+.pairing .icon-indicator.cell,
+.receiver.paired .icon-indicator.cell,
+.receiver.connecting .icon-indicator.cell,
+.transmitter.paired .icon-indicator.laptop,
+.transmitter.connecting .icon-indicator.laptop,
+.transmitter.pairing .exchange,
+.pair-indication .icon-indicator.laptop,
+.pair-indication .icon-indicator.cell,
+.grant-notice .icon-indicator.not-supported,
+.not-supported .icon-indicator.not-supported,
+.touch .icon-indicator.touch,
+.error .icon-indicator.not-supported {
+  opacity: 1;
+}
+
+.icon-indicator.not-supported {
+  position: absolute;
+  left: 50%;
+  margin-left: -48px;
+}
+
+.icon-indicator.small {
+  font-size: 4.0em;
+}
+
+#indicator .connecting {
+  position: absolute;
+  background-image: url(../img/connecting-indicator.gif);
+  background-repeat: no-repeat;
+  background-position: center top;
+  top: -60px;
+  left: 50%;
+  width: 56px;
+  height: 42px;
+  margin-left: -28px;
+  font-size: .6em;
+  color: #792223;
+  opacity: 0;
+}
+
+#indicator .locked {
+  font-family: 'FontAwesome';
+  color: #792223;
+  position: absolute;
+  top: 4.0em;
+  left: 50%;
+  font-size: 1.8em;
+  margin-left: -11px;
+  opacity: 0;
+  -webkit-transition: opacity 1s;
+  -webkit-transition-delay: 1.5s;
+}
+
+.pair-indication .icon-indicator.laptop {
+  -webkit-transform: translate(-1.0em, 0);
+}
+
+.pair-indication .icon-indicator.cell {
+  -webkit-transform: translate(1.0em, 0);
+}
+
+.pairing .icon-indicator.laptop {
+  -webkit-transform: translate(-1.5em, 0);
+}
+
+.pairing .icon-indicator.cell {
+  -webkit-transform: translate(1.5em, 0);
+}
+
+
+.icon-indicator.touch {
+  margin-left: -.75em;
+}
+
+
+/*.transmitter.connecting .icon-indicator.laptop,
+.transmitter.paired .icon-indicator.laptop {
+  margin: 0;
+  margin-left: 1.9em;
+}
+*/
+
+.connecting #indicator .connecting,
+.paired #indicator .locked {
+  opacity: 1;
+}
+
+.transmitter.paired #indicator .locked {
+  margin-left: -9px;
+}
+
+.icon-indicator:after {
+  position: relative;
+  top: 0.25em;
+}
+
+.icon-indicator.cell:after {
+  content: "\f10b";
+}
+
+.icon-indicator.laptop:after {
+  content: "\f109";
+}
+
+.icon-indicator.not-supported:after {
+  content: "\f12a";
+}
+
+.icon-indicator.touch:after {
+  content: "\f062";
+}
+
+#indicator .locked:after {
+  content: "\f023";
+}
+
+#indicator.trigger .cell {
+  -webkit-transform: scale(.5, .5);
+  
+}
