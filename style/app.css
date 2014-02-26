@@ -366,7 +366,7 @@ a {
 }
 
 #indicator .locked:after {
-  content: "\f023";
+  content: "\f004";
 }
 
 #indicator.trigger .cell {
