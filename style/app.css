@@ -341,7 +341,7 @@ a {
 }
 
 .transmitter.paired #indicator .locked {
-  margin-left: -9px;
+  margin-left: -14px;
 }
 
 .icon-indicator:after {
